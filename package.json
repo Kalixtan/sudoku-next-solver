@@ -10,10 +10,8 @@
   },
   "dependencies": {
     "next": "14.1.2",
-    "punycode": "^2.3.1",
     "react": "^18",
-    "react-dom": "^18",
-    "sass": "^1.71.1"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -21,6 +19,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.1.2",
+    "sass": "^1.71.1",
     "typescript": "^5"
   }
 }
