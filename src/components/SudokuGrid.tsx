@@ -13,39 +13,86 @@ interface SudokuCellProps {
     onCellClick: (row: number, column: number) => void;
 }
 
-export const SudokuCell: React.FC<SudokuCellProps> = ({row, column, isSelected, isSelectionAligned, value, onCellClick}) => {
+export const SudokuCell: React.FC<SudokuCellProps> = ({
+    row,
+    column,
+    isSelected,
+    isSelectionAligned,
+    
+    isLineHor,
+    isLineVer,
+    isValueShown,
+    
+    value,
+    onCellClick
+}) => {
     const classes = [styles.cell];
+    
+    if (isValueShown) {
+        classes.push(styles.value);
+    }
+    
+    //* //Extra grid lines
+    if (isLineHor) {
+        classes.push(styles.lineHor);
+    }
+    if (isLineVer) {
+        classes.push(styles.lineVer);
+    }
+    //*/
+    
+     // cells
     if (isSelected) {
         classes.push(styles.selected);
     }
-    if (isSelectionAligned){
+    
+     // is alinged to the sellected cell
+    if (isSelectionAligned) {
         classes.push(styles.aligned);
     }
-    return <button className={classes.join(' ')} onClick={() => onCellClick(row, column)}>{value}</button>
+    
+    return <button className={classes.join(' ')} onClick={() => onCellClick(row, column)}>{value}</button>;
 };
 
+
 export function SudokuRow({row, cells, selectedRow, selectedColumn, onCellClick}) {
-    return <div className={styles.row}>{cells.map((cell: number, column: number) =>
-        <SudokuCell
-            key={column}
-            row={row}
-            column={column}
-            value={cell}
-            isSelectionAligned={selectedRow == row || selectedColumn == column}
-            isSelected={selectedColumn == column && selectedRow == row}
-            onCellClick={onCellClick}
-        />)
-    }</div>
+
+    return <div className={styles.row}>{
+        cells.map((cell, col) =>
+            <SudokuCell
+                key={col}
+                row={row}
+                column={col}
+                value={cell}
+                isSelectionAligned={
+					selectedRow == row || selectedColumn == col || // direct col/ver
+					(
+						Math.floor(selectedColumn/3) == Math.floor(col/3) &&
+						Math.floor(selectedRow/3)    == Math.floor(row/3)
+					)
+				}
+                isSelected={ selectedColumn == col && selectedRow == row}
+                
+                isLineHor={col%3 == 2 && col != 8 } // Horizontal lines.
+                isLineVer={row%3 == 2 && row != 8 } // Vertical lines.
+                isValueShown={ cell != 0 } // if not 0 the number should be shown.
+                
+                
+                onCellClick={onCellClick}
+            />)
+        }</div>
 }
+
 
 
 export default function SudokuGrid({grid}) {
     const [selectedRow, setSelectedRow] = useState();
     const [selectedColumn, setSelectedColumn] = useState();
 
-    const handleCellClick = (row, column) => {
+    const handleCellClick = (row, col) => {
+		console.log(row, col);
         setSelectedRow(row);
-        setSelectedColumn(column);
+        setSelectedColumn(col);
     }
 
     return <div className={styles.grid}>

@@ -1,9 +1,16 @@
 
+.body {
+	background-color: red;
+}
+
 .grid {
+  margin: auto;
   display: flex;
   flex-direction: column;
 
-  border: 2px solid aqua;
+  border:      2px solid #335475;
+  border-left: 3px solid #335475;
+  border-top:  3px solid #335475;
 }
 
 .row {
@@ -11,18 +18,43 @@
 }
 
 .cell {
-  width: 4em;
-  height: 4em;
-  border: 1px solid aqua;
-
+  align-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  border: 0px solid #335475;
+  border-right:  1px solid #335475;
+  border-bottom: 1px solid #335475;
+  
+  background-color: #192b3c;
+  
+  font-weight: 400;
+  font-size: 2.5vw;
+  line-height: 1;
+  font-style: normal;
+  
+  color: transparent;
+  
 
   &.aligned {
-    background-color: lightgray;
+    background-color: #283b51;
   }
 
   &.selected {
-    background-color: gray;
+    background-color: #335475;
+  }
+  
+  &.value {
+	  color: white;
+  }
+  
+  &.sameValue {
+    background-color: #ff5475;
   }
 
-
+  &.lineHor {
+    border-right:  2px solid #335475;
+  }
+  &.lineVer {
+    border-bottom: 2px solid #335475;
+  }
 }
