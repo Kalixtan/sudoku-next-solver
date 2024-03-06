@@ -46,15 +46,15 @@
   &.value {
 	  color: white;
   }
-  
-  &.sameValue {
-    background-color: #ff5475;
+
+  &.locked {
+	color: red;
   }
 
   &.lineHor {
-    border-right:  2px solid #335475;
+    border-right:  3px solid #335475;
   }
   &.lineVer {
-    border-bottom: 2px solid #335475;
+    border-bottom: 3px solid #335475;
   }
 }
