@@ -1,0 +1,28 @@
+
+.grid {
+  display: flex;
+  flex-direction: column;
+
+  border: 2px solid aqua;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 4em;
+  height: 4em;
+  border: 1px solid aqua;
+
+
+  &.aligned {
+    background-color: lightgray;
+  }
+
+  &.selected {
+    background-color: gray;
+  }
+
+
+}
