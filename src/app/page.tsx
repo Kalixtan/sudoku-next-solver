@@ -5,7 +5,7 @@ import SudokuGrid from "@/components/SudokuGrid";
 export default function Home() {
     return (
         <main className={styles.main}>
-            <SudokuGrid initialGrid/>
+            <SudokuGrid/>
         </main>
     );
 }
