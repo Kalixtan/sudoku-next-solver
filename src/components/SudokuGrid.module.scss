@@ -22,8 +22,8 @@
   width: 1.5em;
   height: 1.5em;
   border: 0px solid #335475;
-  border-right:  1px solid #335475;
-  border-bottom: 1px solid #335475;
+  border-right:  0.5px solid #335475;
+  border-bottom: 0.5px solid #335475;
   
   background-color: #192b3c;
   
@@ -44,17 +44,20 @@
   }
   
   &.value {
-	  color: white;
+	color: #59a4fa;
   }
-
+  &.error {
+	background-color: #5c3645;
+	color: #ef4444;
+  }
   &.locked {
-	color: red;
+	color: #f3f3f4;
   }
 
   &.lineHor {
-    border-right:  3px solid #335475;
+    border-right:  2px solid #335475;
   }
   &.lineVer {
-    border-bottom: 3px solid #335475;
+    border-bottom: 2px solid #335475;
   }
 }

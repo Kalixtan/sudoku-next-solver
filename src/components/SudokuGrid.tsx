@@ -45,6 +45,7 @@ const total_grid_h = 16;
 interface Cell {
     value: number;
     locked: boolean;
+    error: boolean;
 }
 
 interface SudokuCellProps {
@@ -70,6 +71,7 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
     isValueShown,
     value,
     isLocked,
+    isError,
     onCellClick
 }) => {
     const classes = [styles.cell];
@@ -80,12 +82,12 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
     if (isSelectionAligned) classes.push(styles.aligned);
     if (isLineHor) classes.push(styles.lineHor);
     if (isLineVer) classes.push(styles.lineVer);
+    if (isError) classes.push(styles.error);
     
     return (
         <button 
             className={classes.join(' ')} 
             onClick={() => onCellClick(row, column)}
-            disabled={isLocked}
         >
             {value ? value : ''}
         </button>
@@ -113,6 +115,7 @@ export function SudokuRow({
                 column={col}
                 value={cell.value}
                 isLocked={cell.locked}
+                isError={cell.error}
                 isSelected={selectedColumn === col && selectedRow === row}
                 isSelectionAligned={
                     selectedRow === row || selectedColumn === col ||
@@ -130,14 +133,29 @@ export function SudokuRow({
 
 export default function SudokuGrid() {
     const emptyGrid: Cell[][] = Array(total_grid_h).fill(null).map(() =>
-        Array(total_grid_w).fill(null).map(() => ({ value: 0, locked: false }))
+        Array(total_grid_w).fill(null).map(() => ({ })) // fill grid with empty cells.
     );
     
     const [grid, setGrid] = useState(emptyGrid);
     const [selectedRow, setSelectedRow] = useState(0);
     const [selectedColumn, setSelectedColumn] = useState(0);
 
+
+    const clearSolvedAndErrors = () => {
+		const newGrid = grid.map(row => 
+			row.map(cell => ({
+				...cell,
+				//value: cell.locked ? cell.value : 0,
+				locked: false,
+				error: false // Set the error flag for all cells
+			}))
+		);
+		setGrid(newGrid); // Update the entire grid
+    };
+
     const handleCellClick = (row: number, col: number) => {
+		console.log(row,col)
+        clearSolvedAndErrors();
         setSelectedRow(row);
         setSelectedColumn(col);
     };
@@ -155,8 +173,18 @@ export default function SudokuGrid() {
         }
     };
 
+	// As websites dont tend to use the keyboard, these are all optional input method for power users and helps when testing as mouse controls are slow.
+	// (I prefer to use these shortcuts)
     const handleKeyDown = (event: KeyboardEvent) => {
+        clearSolvedAndErrors();
+        
+        // Prevent default behavior for Enter and Space keys
+        if (event.key === ' ' || event.key === 'Enter') {
+            event.preventDefault();
+        }
+        
         switch (event.key) {
+			// Move the sellected cell around useing arrow keys.
             case 'ArrowUp':
                 setSelectedRow(prevRow => Math.max(0, prevRow - 1));
                 break;
@@ -169,12 +197,24 @@ export default function SudokuGrid() {
             case 'ArrowRight':
                 setSelectedColumn(prevCol => Math.min(grid[0].length - 1, prevCol + 1));
                 break;
-            case 'Backspace': // Clear cell
+            // Clear cell.
+            case 'Backspace':
             case 'Delete':
                 setCell(selectedRow, selectedColumn, 0, false);
                 break;
-            default: // Add number to cell
-                if (event.key >= '1' && event.key <= '9') {
+            // Run solver
+			case 'Enter':
+				// for now just testing
+				const newGrid = grid.map(row => 
+					row.map(cell => ({
+						...cell,
+						error: cell.value == 1  // Set the error flag for all cells
+					}))
+				);
+				setGrid(newGrid); // Update the entire grid
+				break;
+            default:
+                if (event.key >= '1' && event.key <= '9') { // Add number to cell.
                     setCell(selectedRow, selectedColumn, parseInt(event.key), true);
                 }
                 break;
