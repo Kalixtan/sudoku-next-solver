@@ -1,0 +1,8 @@
+// MainLayout.module.scss
+
+.mainLayout {
+  display: flex;
+  justify-content: center; // Center children horizontally
+  align-items: stretch; // Stretch children to fit the container height
+  margin: auto; // Center the layout horizontally if it has a set max-width
+}

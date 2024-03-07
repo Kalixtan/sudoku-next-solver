@@ -145,9 +145,19 @@ export default function SudokuGrid() {
 		const newGrid = grid.map(row => 
 			row.map(cell => ({
 				...cell,
-				//value: cell.locked ? cell.value : 0,
-				locked: false,
+				value: cell.locked ? cell.value : 0, // clears solusion
 				error: false // Set the error flag for all cells
+			}))
+		);
+		setGrid(newGrid); // Update the entire grid
+    };
+    
+    const runSolver = () => {
+		// for now just testing
+		const newGrid = grid.map(row => 
+			row.map(cell => ({
+				...cell,
+				error: cell.value != 0  // Set the error flag for all cells
 			}))
 		);
 		setGrid(newGrid); // Update the entire grid
@@ -199,19 +209,13 @@ export default function SudokuGrid() {
                 break;
             // Clear cell.
             case 'Backspace':
+            case ' ':
             case 'Delete':
                 setCell(selectedRow, selectedColumn, 0, false);
                 break;
             // Run solver
 			case 'Enter':
-				// for now just testing
-				const newGrid = grid.map(row => 
-					row.map(cell => ({
-						...cell,
-						error: cell.value == 1  // Set the error flag for all cells
-					}))
-				);
-				setGrid(newGrid); // Update the entire grid
+				runSolver();
 				break;
             default:
                 if (event.key >= '1' && event.key <= '9') { // Add number to cell.
