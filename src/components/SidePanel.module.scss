@@ -17,6 +17,7 @@
 .panelButton {
   align-items: center;
   border: 0px;
+  border-radius: 10px;
   
   // set width and height the same so its always square
   height: 100%;
@@ -33,15 +34,28 @@
   
   color: #f3f3f4;
   
+display: flex;
+align: center;
+justify-content: center;
+gap: 0.2em;
+  
+  svg {
+    display: flex;
+    width: 1em;
+    height: 1em;
+  }
+  
   &.squareButton {
-	width: auto;
+	width: 2.5em;
 	aspect-ratio: 1 / 1;
   }
   
   &.eraseButton {
+  flex-direction: column;
   }
   
   &.solveButton {
+ 
     background-color: #335475;
   }
 }
