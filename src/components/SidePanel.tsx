@@ -1,11 +1,10 @@
 import React from 'react';
-import { setGridCell } from './Sudoku';
 import styles from './SidePanel.module.scss';
 import EraserIcon from './icons/eraser.svg';
 import SolveIcon from './icons/solve.svg';
 import { useSudoku } from './SudokuProvider';
 
-const SidePanel: React.FC = (): void => {
+const SidePanel: React.FC = () => {
   const {
     grid,
     clearSolvedAndErrors,
@@ -29,7 +28,10 @@ const SidePanel: React.FC = (): void => {
                   key={value}
                   className={`${styles.panelButton} ${styles.squareButton}`}
                   onClick={() => {
-                    setCell(selectedRow, selectedCol, value, true);
+                    // Only call setCell if selectedRow and selectedCol are not null
+                    if (selectedRow !== null && selectedCol !== null) {
+                      setCell(selectedRow, selectedCol, value, true);
+                    }
                   }}
                 >
                   {value}
@@ -42,7 +44,10 @@ const SidePanel: React.FC = (): void => {
         <button
           className={`${styles.panelButton} ${styles.eraseButton}`}
           onClick={() => {
-            setCell(selectedRow, selectedCol, 0, false);
+            // Only call setCell for erasing if selectedRow and selectedCol are not null
+            if (selectedRow !== null && selectedCol !== null) {
+              setCell(selectedRow, selectedCol, 0, false);
+            }
           }}
         >
           <EraserIcon />

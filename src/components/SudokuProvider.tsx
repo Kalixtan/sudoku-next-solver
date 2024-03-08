@@ -6,28 +6,49 @@ export interface Cell {
   error: boolean;
 }
 
-// Create a new context for the Sudoku state
-const SudokuContext = createContext();
+export interface ISudokuContext {
+  grid: Cell[][];
+  clearSolvedAndErrors: () => void;
+  setCell: (row: number, col: number, value: number, locked: boolean) => void;
+  setSelected: (row: number, col: number) => void;
+  solveSudoku: () => void;
+  selectedRow: number | null;
+  selectedCol: number | null;
+}
 
-// Custom hook to access the Sudoku context
-export const useSudoku = () => useContext(SudokuContext);
+// Ensure your SudokuContext uses this interface for its type
+const SudokuContext = createContext<ISudokuContext | null>(null);
+export const useSudoku = (): ISudokuContext => {
+  const context = useContext(SudokuContext);
+  if (!context) {
+    throw new Error('useSudoku must be used within a SudokuProvider');
+  }
+  return context;
+};
 
 // Sudoku provider component
-export const SudokuProvider = ({ children }) => {
+export const SudokuProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const getEmptyGrid = (gridHeight = 9, gridWidth = 9): Cell[][] =>
     Array(gridHeight)
       .fill(null)
       .map(() =>
         Array(gridWidth)
           .fill(null)
-          .map(() => ({})),
-      ); // fill grid with empty cells.
+          .map(() => ({
+            value: 0, // Default value for an empty cell
+            locked: false, // Newly created cells are not locked
+            error: false, // Newly created cells do not have errors
+          })),
+      );
+  // fill grid with empty cells.
   const initialGrid = getEmptyGrid;
 
   // Define state to manage the current Sudoku grid and selected cell
   const [grid, setGrid] = useState<Cell[][]>(getEmptyGrid());
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedCol, setSelectedCol] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedCol, setSelectedCol] = useState<number | null>(null);
 
   const setCell = (
     row: number,
@@ -54,16 +75,16 @@ export const SudokuProvider = ({ children }) => {
 
   // Function to create a new empty game grid
   const createNewGrid = () => {
-    setGrid(initialGrid);
+    setGrid(initialGrid());
   };
 
   // Function to check if cell is valid in sudoku
   const checkValidCell = (
-    tempGrid,
+    tempGrid: Cell[][],
     row: number,
     col: number,
     value: number,
-  ) => {
+  ): boolean => {
     if (value === 0) return true;
 
     // Check all columns in the given row except for the column of the current cell.
@@ -94,10 +115,10 @@ export const SudokuProvider = ({ children }) => {
   };
 
   // Function to check the game grid
-  const checkValidGrid = (tempGrid): boolean => {
+  const checkValidGrid = (tempGrid: Cell[][]): boolean => {
     let isValid = true;
 
-    const newGrid = grid.map((row, rowIndex) =>
+    const newGrid = tempGrid.map((row, rowIndex) =>
       row.map((cell, colIndex) => {
         const isCellValid = checkValidCell(
           tempGrid,

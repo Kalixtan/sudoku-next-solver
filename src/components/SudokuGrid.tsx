@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
-import { setGridCell, solveGrid } from './Sudoku';
-import { useSudoku } from './SudokuProvider';
+import { useSudoku, Cell } from './SudokuProvider';
 import styles from './SudokuGrid.module.scss';
 
 interface SudokuCellProps {
@@ -23,10 +22,13 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
 
   const isSelected = selectedCol === col && selectedRow === row;
   const isSelectionAligned =
-    selectedRow === row ||
-    selectedCol === col ||
-    (Math.floor(selectedCol / 3) === Math.floor(col / 3) &&
-      Math.floor(selectedRow / 3) === Math.floor(row / 3));
+    selectedRow !== null &&
+    selectedCol !== null &&
+    (selectedRow === row ||
+      selectedCol === col ||
+      (Math.floor(selectedCol / 3) === Math.floor(col / 3) &&
+        Math.floor(selectedRow / 3) === Math.floor(row / 3)));
+
   const isLineHor = col % 3 === 2 && col !== 8;
   const isLineVer = row % 3 === 2 && row !== 8;
 
