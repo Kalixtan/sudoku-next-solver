@@ -74,6 +74,8 @@ const SudokuGrid: React.FC = () => {
           event.preventDefault();
         }
 
+        clearSolvedAndErrors();
+
         switch (event.key) {
           case 'ArrowUp':
             setSelected(Math.max(0, selectedRow - 1), selectedCol);
@@ -114,7 +116,15 @@ const SudokuGrid: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [grid, selectedCol, selectedRow]);
+  }, [
+    grid,
+    selectedCol,
+    selectedRow,
+    clearSolvedAndErrors,
+    setCell,
+    setSelected,
+    solveSudoku,
+  ]);
 
   return (
     <div className={styles.grid} tabIndex={0}>

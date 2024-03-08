@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
 export interface Cell {
   value: number;
@@ -155,17 +155,18 @@ export const SudokuProvider = ({ children }) => {
     const tempGrid = grid.map((row) => row.map((cell) => ({ ...cell }))); // Deep copy of the grid
 
     if (!checkValidGrid(tempGrid)) {
-      console.log("Invalid grid configuration.");
+      console.log('Invalid grid configuration.');
       return;
     }
 
     if (solveStep(tempGrid)) {
-      console.log("Sudoku solved!");
+      console.log('Sudoku solved!');
     } else {
-      console.log("Solution not found.");
+      console.log('Solution not found.');
     }
   };
 
+  // Cleans up error tiles as well as past solusions
   const clearSolvedAndErrors = (): void => {
     const newGrid = grid.map((row) =>
       row.map((cell) => ({
